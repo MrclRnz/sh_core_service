@@ -1,14 +1,23 @@
-use rumqttc::QoS;
-use sh_core_service::{http_server::http_server, mqtt_client};
+use std::sync::Arc;
+
+use async_std::sync::Mutex;
+use sh_core_service::{
+    http_server::http_server::{self, HttpServerState},
+    mqtt_client,
+};
 
 #[async_std::main]
 async fn main() -> tide::Result<()> {
-    http_server::start_server().await?;
-    //let mut client = mqtt_client::create_connection();
-    //client.subscribe("hello/rumqtt", QoS::AtMostOnce).unwrap();
-    //client.publish("hello/rumqtt", QoS::AtLeastOnce, false, "test").unwrap();
+    let (mqtt_client, mqtt_connection) = mqtt_client::create_connection();
+    let init_state = Arc::new(Mutex::new(HttpServerState {
+        devices: Vec::new(),
+        mqtt_client,
+        mqtt_connection,
+    }));
 
-
+    http_server::start_server(init_state)
+        .await
+        .expect("Could not start HTTP server!");
 
     Ok(())
 }
