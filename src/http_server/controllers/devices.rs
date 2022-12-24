@@ -3,21 +3,25 @@ use std::sync::Arc;
 use async_std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 use tide::{Body, Request, Response, StatusCode};
+use ts_rs::TS;
 
 use crate::http_server::http_server::HttpServerState;
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
+#[ts(export)]
 enum DeviceType {
     Led,
     Lamp,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
+#[ts(export)]
 enum State {
     On,
     Off,
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
+#[ts(export)]
 pub struct Device {
     id: usize,
     dev_type: DeviceType,
