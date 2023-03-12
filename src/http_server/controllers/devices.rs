@@ -52,7 +52,7 @@ pub async fn register_device(
         let state_reference_mutex = Arc::clone(req.state());
         let mut state_guard = state_reference_mutex.lock().await;
         state_guard.devices.push(device);
-        Ok(Response::new(StatusCode::Ok))
+        Ok(Response::new(StatusCode::Created))
     } else {
         return Err(tide::Error::from_str(
             StatusCode::InternalServerError,

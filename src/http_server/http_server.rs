@@ -27,7 +27,7 @@ pub async fn start_server(init_state: Arc<Mutex<HttpServerState>>) -> tide::Resu
     app.at("/mqtt/health").get(is_alive);
     app.at("/mqtt").post(publish_message);
 
-    app.listen("127.0.0.1:8080").await?;
+    app.listen("0.0.0.0:8080").await?;
     Ok(())
 }
 
